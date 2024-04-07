@@ -40,7 +40,7 @@ const logoutHandler = rest.post(
 );
 
 const meHandler = rest.get(
-    `${API_URL}/auth/logout`,
+    `${API_URL}/auth/me`,
     async (req, res, ctx) => {
         const user = requireAuth({
             cookies: req.cookies,

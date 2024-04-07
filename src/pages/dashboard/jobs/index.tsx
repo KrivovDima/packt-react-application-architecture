@@ -7,7 +7,7 @@ import { Loading } from '@/components/loading';
 import { Seo } from '@/components/seo';
 import { JobsList, useJobs } from '@/features/jobs';
 import { DashboardLayout } from '@/layouts/dashboard-layout';
-import { useUser } from '@/testing/test-data';
+import { useUser } from '@/features/auth';
 
 const DashboardJobsPage = () => {
     const user = useUser();

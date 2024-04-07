@@ -9,7 +9,12 @@ import { ReactNode } from 'react';
 
 import { Button } from '@/components/button';
 import { Link } from '@/components/link';
-import { useUser } from '@/testing/test-data';
+import { useRouter } from 'next/router';
+import {
+    Protected,
+    useLogout,
+    useUser,
+} from '@/features/auth';
 
 type DashboardLayoutProps = {
     children: ReactNode;
@@ -21,27 +26,35 @@ export const DashboardLayout = ({
     const user = useUser();
 
     return (
-        <Box as="section" h="100vh" overflowY="auto">
-            <Navbar />
-            <Container
-                as="main"
-                maxW="container.lg"
-                py="12"
-            >
-                {children}
-            </Container>
-            <Box py="8" textAlign="center">
-                <Link
-                    href={`/organizations/${user.data?.organizationId}`}
+        <Protected>
+            <Box as="section" h="100vh" overflowY="auto">
+                <Navbar />
+                <Container
+                    as="main"
+                    maxW="container.lg"
+                    py="12"
                 >
-                    View public Organization Page
-                </Link>
+                    {children}
+                </Container>
+                <Box py="8" textAlign="center">
+                    <Link
+                        href={`/organizations/${user.data?.organizationId}`}
+                    >
+                        View public Organization Page
+                    </Link>
+                </Box>
             </Box>
-        </Box>
+        </Protected>
     );
 };
 
 const Navbar = () => {
+    const router = useRouter();
+
+    const logout = useLogout({
+        onSuccess: () => router.push('/auth/login'),
+    });
+
     return (
         <Box as="nav" bg="primary" color="primaryAccent">
             <Container
@@ -66,11 +79,11 @@ const Navbar = () => {
                     </HStack>
                     <HStack>
                         <Button
+                            isDisabled={logout.isPending}
+                            isLoading={logout.isPending}
                             variant="outline"
                             onClick={() =>
-                                console.log(
-                                    'Logging Out...'
-                                )
+                                logout.submit()
                             }
                         >
                             Log Out

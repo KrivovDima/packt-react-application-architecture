@@ -28,7 +28,7 @@ export const authenticate = ({
         },
     });
 
-    if (password === user?.id) {
+    if (password === user?.password) {
         const sanitizedUser = sanitizeUser(user);
         const encodedToken = AUTH_TOKEN;
 
