@@ -1,4 +1,5 @@
 import { API_URL } from '@/config/constants';
+import { notificationStore } from '@/stores/notifications';
 import Axios from 'axios';
 
 export const apiClient = Axios.create({
@@ -18,6 +19,13 @@ apiClient.interceptors.response.use(
             error.message;
 
         console.error(message);
+
+        notificationStore.getState().showNotification({
+            title: 'Error',
+            type: 'error',
+            duration: 5000,
+            message,
+        });
 
         return Promise.reject(error);
     }
